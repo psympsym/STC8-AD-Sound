@@ -1,0 +1,144 @@
+C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE AD
+OBJECT MODULE PLACED IN .\Objects\AD.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE User\AD.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\User;.\Drivers;.\STC8Ax_LIB\Cor
+                    -e\Startup;.\STC8Ax_LIB\inc;.\STC8Ax_LIB\Core) DEBUG OBJECTEXTEND PRINT(.\Listings\AD.lst) OBJECT(.\Objects\AD.obj)
+
+line level    source
+
+   1          /*-------------------------------------------------------------------------------
+   2          /*       (C) Copyright 2023, PSYM. All Rights Reserved 
+   3          /*-------------------------------------------------------------------------------
+   4          /* File name   : AD.c
+   5          /* Description : 
+   6          /* Author      : PSYM
+   7          /*-------------------------------------------------------------------------------
+   8          /* Update note:
+   9          /* -----------   -----------   --------------------------------------------------
+  10          /*    Date         Author                              Note
+  11          /* -----------   -----------   --------------------------------------------------
+  12          /* 2023-06-08       PSYM
+  13          /*   14:50
+  14          **/
+  15          
+  16          /* ---------------------------------- 包含头文件 ---------------------------------- */
+  17          #include "AD.h"
+  18          
+  19          /* ---------------------------------- 私有宏定义 ---------------------------------- */
+  20          #define VCC 3300 // 电源电压mv
+  21          #define ADC_RES_12BIT 4096 // 12位采样分辨率
+  22          
+  23          /* ---------------------------------- 私有类型定义 ---------------------------------- */
+  24          sbit ADC_IO = P0 ^ 0; // ADC通道选择端口
+  25          sbit ADC_CFG = 0xDE; // ADC配置寄存器
+  26          
+  27          /* ---------------------------------- 私有变量 ---------------------------------- */
+  28          uint16 ADC_Value = 0; // ADC转换结果
+  29          uint32 voltage = 0; // 实际电压值
+  30          
+  31          /* ---------------------------------- 扩展变量 ---------------------------------- */
+  32          uint32 ave_vol = 0; // 6次电压平均值
+  33          
+  34          /* ---------------------------------- 私有函数原型 ---------------------------------- */
+  35          void AD_Start();
+  36          void Sampl();
+  37          
+  38          /* ---------------------------------- 函数体 ---------------------------------- */
+  39          
+  40          /**
+  41           * @brief: None
+  42           * @param: None
+  43           * @return: None
+  44           * @note: None
+  45           */
+  46          void AD_Init()
+  47          {
+  48   1          ADC_CONTR &= 0xF0; // 清除模拟通道选择位
+  49   1          ADC_CONTR |= 0x08; // 设置ADC模拟通道 P0.0
+  50   1      
+  51   1          ADC_CFG &= 0x00; // 清除所有标志位
+  52   1          ADC_CFG |= 0x00; // 设置ADC转换结果为左对齐
+  53   1          ADC_CFG |= 0x0F; // 设置ADC时钟频率
+  54   1      
+C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 2   
+
+  55   1              AD_Start(); // 开启ADC转换
+  56   1      }
+  57          
+  58          void AD_Start()
+  59          {
+  60   1          ADC_CONTR |= 0x80; // 开启ADC电源
+  61   1              Delay_ms(1);
+  62   1          ADC_CONTR |= 0x40; // 启动ADC转换
+  63   1      }
+  64          
+  65          /**
+  66           * @brief: 采样转换
+  67          */
+  68          void Sampl()
+  69          {
+  70   1          // 启动ADC转换
+  71   1              AD_Start();
+  72   1      
+  73   1          //等待ADC转换完成，ADC转换完成ADC_CONTR的第5位会自动被置1
+  74   1              while (!(ADC_CONTR & 0x20))
+  75   1                      ;
+  76   1      
+  77   1          // 读取ADC转换结果， 左对齐需将ADC_RES左移4位再与ADC_RESL右移4位
+  78   1              ADC_Value = ADC_RES << 4;
+  79   1              ADC_Value |= ADC_RESL >> 4;
+  80   1      
+  81   1          // 将AD值转换为电压值
+  82   1              voltage = VCC * (uint32)ADC_Value / ADC_RES_12BIT;
+  83   1      
+  84   1          // 清除ADC转换完成标志位
+  85   1              ADC_CONTR &= 0xDF;
+  86   1      }
+  87          
+  88          /**
+  89           * @brief: 滤波
+  90           * @param: None
+  91           * @return: None
+  92           * @note: None
+  93           */
+  94          void aveADC()
+  95          {
+  96   1          uint8 i = 0;
+  97   1          uint16 max = 0;
+  98   1          uint16 min = 0;
+  99   1          uint32 sum = 0;
+ 100   1      
+ 101   1          for (i = 0; i < 6; i++)
+ 102   1          {
+ 103   2              Sampl();
+ 104   2              sum += voltage;
+ 105   2              if (voltage > max)
+ 106   2              {
+ 107   3                  max = voltage;
+ 108   3              }
+ 109   2              if (voltage < min)
+ 110   2              {
+ 111   3                  min = voltage;
+ 112   3              }
+ 113   2          }
+ 114   1          ave_vol = (sum - max - min) / 4;
+ 115   1      }
+ 116          /*>>>>>>>>>> (C) COPYRIGHT PSYM <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 3   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    283    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

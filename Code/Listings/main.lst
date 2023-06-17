@@ -1,0 +1,106 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/17/2023 15:21:47 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE User\main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\User;.\Drivers;.\STC8Ax_LIB\C
+                    -ore\Startup;.\STC8Ax_LIB\inc;.\STC8Ax_LIB\Core) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*-------------------------------------------------------------------
+   2          /*      (C) Copyright 2021-2022, nbufe. All Rights Reserved
+   3          /*-------------------------------------------------------------------
+   4          /* File name   : main.c
+   5          /* Description :
+   6          /* Author      : nbufe
+   7          /*-------------------------------------------------------------------
+   8          /* Update note:
+   9          /* ---------   -----------   ----------------------------------------
+  10          /*   Date        Author                       Note
+  11          /* ---------   -----------   ----------------------------------------
+  12          /*
+  13          /*
+  14          **/
+  15          
+  16          /* 包含头文件 -------------------------------------------------------*/
+  17          #include "main.h"
+  18          
+  19          /* 私有类型定义 -----------------------------------------------------*/
+  20          /* None. */
+  21          
+  22          /* 私有宏定义 -------------------------------------------------------*/
+  23          /* None. */
+  24          
+  25          /* 私有变量 ---------------------------------------------------------*/
+  26          int i = 0;
+  27          int temp = 0;
+  28          /* 扩展变量 ---------------------------------------------------------*/
+  29          /* None. */
+  30          
+  31          /* 私有函数原形 -----------------------------------------------------*/
+  32          /* None. */
+  33          
+  34          /* 函数体 -----------------------------------------------------------*/
+  35          /*
+  36           * 功能: 主函数
+  37           * 参数: None
+  38           * 返回: None
+  39           * 说明: None
+  40           */
+  41          void main()
+  42          {
+  43   1          System_Init();
+  44   1          Delay_ms(500);
+  45   1          Peripheral_Init();
+  46   1          
+  47   1          while (1)
+  48   1          {
+  49   2              aveADC();
+  50   2      
+  51   2              // 设置数码管显示
+  52   2              DisplayLoad(3, ave_vol / 10000 % 10, 0);
+  53   2              DisplayLoad(2, ave_vol / 1000 % 10, 1);
+  54   2              DisplayLoad(1, ave_vol / 100 % 10, 0);
+C51 COMPILER V9.60.0.0   MAIN                                                              06/17/2023 15:21:47 PAGE 2   
+
+  55   2              DisplayLoad(0, ave_vol / 10 % 10, 0);
+  56   2              printf("ave_vol=%.3fV\n", ave_vol / 1000.0);
+  57   2      
+  58   2                      // 设置点阵屏显示
+  59   2              for (i = 0; i < 7; i++)
+  60   2              {
+  61   3                  hight[i] = hight[i + 1];
+  62   3              }
+  63   2              temp = ave_vol / 100;
+  64   2                      if (temp < 1)
+  65   2                      {
+  66   3                              temp = 1;
+  67   3                      }
+  68   2                      else if (temp > 18)
+  69   2                      {
+  70   3                              temp = 18;
+  71   3                      }
+  72   2                      hight[i] = (temp - 1) / 2;
+  73   2      
+  74   2              printf("hight=%d\n", hight[i]);
+  75   2      
+  76   2              Delay_ms(100);
+  77   2          }
+  78   1      }
+  79          
+  80          /*>>>>>>>>>> (C) COPYRIGHT NBUFE <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    370    ----
+   CONSTANT SIZE    =     25    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,82 @@
+C51 COMPILER V9.60.0.0   LED                                                               06/17/2023 15:21:48 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\LED.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE User\LED.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\User;.\Drivers;.\STC8Ax_LIB\Co
+                    -re\Startup;.\STC8Ax_LIB\inc;.\STC8Ax_LIB\Core) DEBUG OBJECTEXTEND PRINT(.\Listings\LED.lst) OBJECT(.\Objects\LED.obj)
+
+line level    source
+
+   1          /*-------------------------------------------------------------------
+   2          /*      (C) Copyright 2023, PSYM. All Rights Reserved
+   3          /*-------------------------------------------------------------------
+   4          /* File name   : LED.c
+   5          /* Description :
+   6          /* Author      : PSYM
+   7          /*-------------------------------------------------------------------
+   8          /* Update note:
+   9          /* -----------   -----------   --------------------------------------
+  10          /*    Date         Author                       Note
+  11          /* -----------   -----------   --------------------------------------
+  12          /* 2023-05-23,     psym
+  13          /*   17:04
+  14          **/
+  15          
+  16          /* 包含头文件 -------------------------------------------------------*/
+  17          #include "LED.h"
+  18          
+  19          /* 私有类型定义 -----------------------------------------------------*/
+  20          /* None. */
+  21          
+  22          /* 私有宏定义 -------------------------------------------------------*/
+  23          #define LED8X_COL P6 // 8x8点阵屏列扫描端口
+  24          #define LED8X_ROW P7 // 8x8点阵屏行扫描端口
+  25          
+  26          /* 私有变量 ---------------------------------------------------------*/
+  27          code uint8 IMAGES[] = { 0xFF, 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
+  28          const int IMAGES_LEN = sizeof(IMAGES)/8;
+  29          
+  30          uint8 index;
+  31          
+  32          /* 扩展变量 ---------------------------------------------------------*/
+  33          int hight[] = { 1, 2, 3, 4, 5, 6, 7, 8, };
+  34          
+  35          /* 私有函数原形 -----------------------------------------------------*/
+  36          /* None. */
+  37          
+  38          /* 函数体 -----------------------------------------------------------*/
+  39          
+  40          /**
+  41           * @brief  LED8X8点阵屏显示
+  42           * @param  row: 列号
+  43           * @retval None
+  44           * @note   None
+  45           */
+  46          void LED()
+  47          {
+  48   1          for (index = 0; index < 8; index++)
+  49   1          {
+  50   2              LED8X_COL = 0x00; // 消影
+  51   2              LED8X_ROW = IMAGES[hight[index]];
+  52   2              LED8X_COL = _cror_(0x80, index); // 列扫描
+  53   2          }
+  54   1      }
+C51 COMPILER V9.60.0.0   LED                                                               06/17/2023 15:21:48 PAGE 2   
+
+  55          
+  56          /*>>>>>>>>>> (C) COPYRIGHT PSYM <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     59    ----
+   CONSTANT SIZE    =      9    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     19    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

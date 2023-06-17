@@ -1,0 +1,87 @@
+C51 COMPILER V9.60.0.0   STC8AX_ISR                                                        06/17/2023 15:21:48 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STC8AX_ISR
+OBJECT MODULE PLACED IN .\Objects\stc8Ax_ISR.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE User\stc8Ax_ISR.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\User;.\Drivers;.\STC8Ax
+                    -_LIB\Core\Startup;.\STC8Ax_LIB\inc;.\STC8Ax_LIB\Core) DEBUG OBJECTEXTEND PRINT(.\Listings\stc8Ax_ISR.lst) OBJECT(.\Objec
+                    -ts\stc8Ax_ISR.obj)
+
+line level    source
+
+   1          /*-------------------------------------------------------------------
+   2          /*      (C) Copyright 2021-2022, nbufe. All Rights Reserved
+   3          /*-------------------------------------------------------------------
+   4          /* File name   : STC8Ax_ISR.c
+   5          /* Description :
+   6          /* Author      : nbufe
+   7          /*-------------------------------------------------------------------
+   8          /* Update note:
+   9          /* ---------   -----------   ----------------------------------------
+  10          /*   Date        Author                       Note
+  11          /* ---------   -----------   ----------------------------------------
+  12          /*
+  13          /*
+  14          **/
+  15          
+  16          /* 包含头文件 -------------------------------------------------------*/
+  17          #include "STC8Ax_ISR.h"
+  18          
+  19          /* 私有类型定义 -----------------------------------------------------*/
+  20          /* None. */
+  21          
+  22          /* 私有宏定义 -------------------------------------------------------*/
+  23          /* None. */
+  24          
+  25          /* 私有变量 ---------------------------------------------------------*/
+  26          uint8 time1 = 0;
+  27          
+  28          /* 扩展变量 ---------------------------------------------------------*/
+  29          /* None. */
+  30          
+  31          /* 私有函数原形 -----------------------------------------------------*/
+  32          /* None. */
+  33          
+  34          /* 函数体 -----------------------------------------------------------*/
+  35          /* 第四区 系统中断处理 */
+  36          /**
+  37           * 功能：定时中断函数
+  38           * 参数：None
+  39           * 返回：None
+  40           * 说明：
+  41           */
+  42          void TIMER0_ISR() interrupt TIMER0_VECTOR
+  43          {
+  44   1          TF0 = 0; // 清除中断标志
+  45   1          TR0 = 0; // 关中断
+  46   1      
+  47   1              if (++time1 % 200 == 0)
+  48   1              {
+  49   2                      DigLED_Display();
+  50   2                  KeyScan();
+  51   2              }
+  52   1      
+  53   1              LED();
+C51 COMPILER V9.60.0.0   STC8AX_ISR                                                        06/17/2023 15:21:48 PAGE 2   
+
+  54   1      
+  55   1          TH0 = 0xFF; // 重装初始值(65535-20)=65515=0xFFEB
+  56   1          TL0 = 0xEB;
+  57   1          TR0 = 1; // 开中断
+  58   1      }
+  59          
+  60          /*>>>>>>>>>> (C) COPYRIGHT NBUFE <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     89    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
