@@ -25,6 +25,7 @@
 /* 私有变量 ---------------------------------------------------------*/
 int i = 0;
 int temp = 0;
+
 /* 扩展变量 ---------------------------------------------------------*/
 /* None. */
 
@@ -43,10 +44,60 @@ void main()
     System_Init();
     Delay_ms(500);
     Peripheral_Init();
-    
+
     while (1)
     {
         aveADC();
+
+        switch (Keysign)
+        {
+        case 1:
+            // 计算高度
+            temp = ave_vol / 100;
+            temp = temp < 1 ? 1 : temp;
+            temp = temp > 18 ? 18 : temp;
+            temp = (temp - 1) / 2;
+            for (i = 0; i < 7; i++)
+            {
+                hight[i] = hight[i + 1];
+            }
+            hight[i] = temp;
+            break;
+        case 2:
+            // 计算高度
+            temp = ave_vol / 100;
+            temp = temp < 1 ? 1 : temp;
+            temp = temp > 18 ? 18 : temp;
+            temp = (temp - 1) / 2;
+            for (i = 0; i < 8; i++)
+            {
+                hight[i] = temp;
+            }
+            break;
+        case 3:
+            temp = ave_vol / 100;
+            temp = temp < 1 ? 1 : temp;
+            temp = temp > 18 ? 18 : temp;
+            temp = temp / 4;
+            for (i = 0; i < 7; i++)
+            {
+                hight[i] = hight[i + 1];
+            }
+            hight[i] = temp;
+            break;
+		case 4:
+            temp = ave_vol / 100;
+            temp = temp < 1 ? 1 : temp;
+            temp = temp > 18 ? 18 : temp;
+            temp = temp / 4;
+            for (i = 0; i < 8; i++)
+            {
+                hight[i] = temp;
+            }
+			break;
+        default:
+            break;
+        }
 
         // 设置数码管显示
         DisplayLoad(3, ave_vol / 10000 % 10, 0);
@@ -54,26 +105,7 @@ void main()
         DisplayLoad(1, ave_vol / 100 % 10, 0);
         DisplayLoad(0, ave_vol / 10 % 10, 0);
         printf("ave_vol=%.3fV\n", ave_vol / 1000.0);
-
-		// 设置点阵屏显示
-        for (i = 0; i < 7; i++)
-        {
-            hight[i] = hight[i + 1];
-        }
-        temp = ave_vol / 100;
-		if (temp < 1)
-		{
-			temp = 1;
-		}
-		else if (temp > 18)
-		{
-			temp = 18;
-		}
-		hight[i] = (temp - 1) / 2;
-
-        printf("hight=%d\n", hight[i]);
-
-        Delay_ms(100);
+        printf("hight=%d\n", temp);
     }
 }
 

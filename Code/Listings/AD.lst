@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 1   
+C51 COMPILER V9.60.0.0   AD                                                                06/18/2023 16:02:10 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE AD
@@ -62,7 +62,7 @@ line level    source
   52   1          ADC_CFG |= 0x00; // 设置ADC转换结果为左对齐
   53   1          ADC_CFG |= 0x0F; // 设置ADC时钟频率
   54   1      
-C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 2   
+C51 COMPILER V9.60.0.0   AD                                                                06/18/2023 16:02:10 PAGE 2   
 
   55   1              AD_Start(); // 开启ADC转换
   56   1      }
@@ -126,7 +126,7 @@ line level    source
  114   1          ave_vol = (sum - max - min) / 4;
  115   1      }
  116          /*>>>>>>>>>> (C) COPYRIGHT PSYM <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
-C51 COMPILER V9.60.0.0   AD                                                                06/17/2023 15:21:47 PAGE 3   
+C51 COMPILER V9.60.0.0   AD                                                                06/18/2023 16:02:10 PAGE 3   
 
 
 

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   LED                                                               06/17/2023 15:21:48 PAGE 1   
+C51 COMPILER V9.60.0.0   LED                                                               06/18/2023 16:02:10 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LED
@@ -34,46 +34,61 @@ line level    source
   24          #define LED8X_ROW P7 // 8x8点阵屏行扫描端口
   25          
   26          /* 私有变量 ---------------------------------------------------------*/
-  27          code uint8 IMAGES[] = { 0xFF, 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
-  28          const int IMAGES_LEN = sizeof(IMAGES)/8;
-  29          
-  30          uint8 index;
-  31          
-  32          /* 扩展变量 ---------------------------------------------------------*/
-  33          int hight[] = { 1, 2, 3, 4, 5, 6, 7, 8, };
-  34          
-  35          /* 私有函数原形 -----------------------------------------------------*/
-  36          /* None. */
-  37          
-  38          /* 函数体 -----------------------------------------------------------*/
-  39          
-  40          /**
-  41           * @brief  LED8X8点阵屏显示
-  42           * @param  row: 列号
-  43           * @retval None
-  44           * @note   None
-  45           */
-  46          void LED()
-  47          {
-  48   1          for (index = 0; index < 8; index++)
-  49   1          {
-  50   2              LED8X_COL = 0x00; // 消影
-  51   2              LED8X_ROW = IMAGES[hight[index]];
-  52   2              LED8X_COL = _cror_(0x80, index); // 列扫描
-  53   2          }
-  54   1      }
-C51 COMPILER V9.60.0.0   LED                                                               06/17/2023 15:21:48 PAGE 2   
+  27          code uint8 LEDHIGHT[] = { 0xFF, 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
+  28          code uint8 MIDDLE[] = { 0xFF, 0xE7, 0xC3, 0x81, 0x00 };
+  29          uint8 index;
+  30          
+  31          /* 扩展变量 ---------------------------------------------------------*/
+  32          int hight[] = { 1, 2, 3, 4, 5, 6, 7, 8, };
+  33          
+  34          /* 私有函数原形 -----------------------------------------------------*/
+  35          /* None. */
+  36          
+  37          /* 函数体 -----------------------------------------------------------*/
+  38          
+  39          /**
+  40           * @brief  LED8X8点阵屏显示
+  41           * @param  None
+  42           * @retval None
+  43           * @note   从低到高
+  44           */
+  45          void LED1()
+  46          {
+  47   1          for (index = 0; index < 8; index++)
+  48   1          {
+  49   2              LED8X_COL = 0x00; // 消影
+  50   2              LED8X_ROW = LEDHIGHT[hight[index]];
+  51   2              LED8X_COL = _cror_(0x80, index); // 列扫描
+  52   2          }
+  53   1      }
+  54          
+C51 COMPILER V9.60.0.0   LED                                                               06/18/2023 16:02:10 PAGE 2   
 
-  55          
-  56          /*>>>>>>>>>> (C) COPYRIGHT PSYM <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+  55          /**
+  56           * @brief  LED8X8点阵屏显示
+  57           * @param  None
+  58           * @retval None
+  59           * @note   从中间到两边
+  60           */
+  61          void LED2()
+  62          {
+  63   1          for (index = 0; index < 8; index++)
+  64   1          {
+  65   2              LED8X_COL = 0x00; // 消影
+  66   2              LED8X_ROW = MIDDLE[hight[index]];
+  67   2              LED8X_COL = _cror_(0x80, index); // 列扫描
+  68   2          }
+  69   1      }
+  70          
+  71          /*>>>>>>>>>> (C) COPYRIGHT PSYM <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     59    ----
-   CONSTANT SIZE    =      9    ----
+   CODE SIZE        =    118    ----
+   CONSTANT SIZE    =     14    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     19    ----
+   DATA SIZE        =     17    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

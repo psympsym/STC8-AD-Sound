@@ -44,13 +44,16 @@ void TIMER0_ISR() interrupt TIMER0_VECTOR
     TF0 = 0; // 清除中断标志
     TR0 = 0; // 关中断
 
-	if (++time1 % 200 == 0)
+	if (++time1 % 20 == 0)
 	{
 		DigLED_Display();
 	    KeyScan();
 	}
 
-	LED();
+	if (Keysign == 1 || Keysign == 2)
+		LED1();
+	else if (Keysign == 3 || Keysign == 4)
+        LED2();
 
     TH0 = 0xFF; // 重装初始值(65535-20)=65515=0xFFEB
     TL0 = 0xEB;

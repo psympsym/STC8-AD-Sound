@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   MAIN                                                              06/17/2023 15:21:47 PAGE 1   
+C51 COMPILER V9.60.0.0   MAIN                                                              06/18/2023 16:02:10 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
@@ -35,65 +35,99 @@ line level    source
   25          /* 私有变量 ---------------------------------------------------------*/
   26          int i = 0;
   27          int temp = 0;
-  28          /* 扩展变量 ---------------------------------------------------------*/
-  29          /* None. */
-  30          
-  31          /* 私有函数原形 -----------------------------------------------------*/
-  32          /* None. */
-  33          
-  34          /* 函数体 -----------------------------------------------------------*/
-  35          /*
-  36           * 功能: 主函数
-  37           * 参数: None
-  38           * 返回: None
-  39           * 说明: None
-  40           */
-  41          void main()
-  42          {
-  43   1          System_Init();
-  44   1          Delay_ms(500);
-  45   1          Peripheral_Init();
-  46   1          
-  47   1          while (1)
-  48   1          {
-  49   2              aveADC();
-  50   2      
-  51   2              // 设置数码管显示
-  52   2              DisplayLoad(3, ave_vol / 10000 % 10, 0);
-  53   2              DisplayLoad(2, ave_vol / 1000 % 10, 1);
-  54   2              DisplayLoad(1, ave_vol / 100 % 10, 0);
-C51 COMPILER V9.60.0.0   MAIN                                                              06/17/2023 15:21:47 PAGE 2   
+  28          
+  29          /* 扩展变量 ---------------------------------------------------------*/
+  30          /* None. */
+  31          
+  32          /* 私有函数原形 -----------------------------------------------------*/
+  33          /* None. */
+  34          
+  35          /* 函数体 -----------------------------------------------------------*/
+  36          /*
+  37           * 功能: 主函数
+  38           * 参数: None
+  39           * 返回: None
+  40           * 说明: None
+  41           */
+  42          void main()
+  43          {
+  44   1          System_Init();
+  45   1          Delay_ms(500);
+  46   1          Peripheral_Init();
+  47   1      
+  48   1          while (1)
+  49   1          {
+  50   2              aveADC();
+  51   2      
+  52   2              switch (Keysign)
+  53   2              {
+  54   3              case 1:
+C51 COMPILER V9.60.0.0   MAIN                                                              06/18/2023 16:02:10 PAGE 2   
 
-  55   2              DisplayLoad(0, ave_vol / 10 % 10, 0);
-  56   2              printf("ave_vol=%.3fV\n", ave_vol / 1000.0);
-  57   2      
-  58   2                      // 设置点阵屏显示
-  59   2              for (i = 0; i < 7; i++)
-  60   2              {
-  61   3                  hight[i] = hight[i + 1];
-  62   3              }
-  63   2              temp = ave_vol / 100;
-  64   2                      if (temp < 1)
-  65   2                      {
-  66   3                              temp = 1;
-  67   3                      }
-  68   2                      else if (temp > 18)
-  69   2                      {
-  70   3                              temp = 18;
-  71   3                      }
-  72   2                      hight[i] = (temp - 1) / 2;
-  73   2      
-  74   2              printf("hight=%d\n", hight[i]);
-  75   2      
-  76   2              Delay_ms(100);
-  77   2          }
-  78   1      }
-  79          
-  80          /*>>>>>>>>>> (C) COPYRIGHT NBUFE <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
+  55   3                  // 计算高度
+  56   3                  temp = ave_vol / 100;
+  57   3                  temp = temp < 1 ? 1 : temp;
+  58   3                  temp = temp > 18 ? 18 : temp;
+  59   3                  temp = (temp - 1) / 2;
+  60   3                  for (i = 0; i < 7; i++)
+  61   3                  {
+  62   4                      hight[i] = hight[i + 1];
+  63   4                  }
+  64   3                  hight[i] = temp;
+  65   3                  break;
+  66   3              case 2:
+  67   3                  // 计算高度
+  68   3                  temp = ave_vol / 100;
+  69   3                  temp = temp < 1 ? 1 : temp;
+  70   3                  temp = temp > 18 ? 18 : temp;
+  71   3                  temp = (temp - 1) / 2;
+  72   3                  for (i = 0; i < 8; i++)
+  73   3                  {
+  74   4                      hight[i] = temp;
+  75   4                  }
+  76   3                  break;
+  77   3              case 3:
+  78   3                  temp = ave_vol / 100;
+  79   3                  temp = temp < 1 ? 1 : temp;
+  80   3                  temp = temp > 18 ? 18 : temp;
+  81   3                  temp = temp / 4;
+  82   3                  for (i = 0; i < 7; i++)
+  83   3                  {
+  84   4                      hight[i] = hight[i + 1];
+  85   4                  }
+  86   3                  hight[i] = temp;
+  87   3                  break;
+  88   3                      case 4:
+  89   3                  temp = ave_vol / 100;
+  90   3                  temp = temp < 1 ? 1 : temp;
+  91   3                  temp = temp > 18 ? 18 : temp;
+  92   3                  temp = temp / 4;
+  93   3                  for (i = 0; i < 8; i++)
+  94   3                  {
+  95   4                      hight[i] = temp;
+  96   4                  }
+  97   3                              break;
+  98   3              default:
+  99   3                  break;
+ 100   3              }
+ 101   2      
+ 102   2              // 设置数码管显示
+ 103   2              DisplayLoad(3, ave_vol / 10000 % 10, 0);
+ 104   2              DisplayLoad(2, ave_vol / 1000 % 10, 1);
+ 105   2              DisplayLoad(1, ave_vol / 100 % 10, 0);
+ 106   2              DisplayLoad(0, ave_vol / 10 % 10, 0);
+ 107   2              printf("ave_vol=%.3fV\n", ave_vol / 1000.0);
+ 108   2              printf("hight=%d\n", temp);
+ 109   2          }
+ 110   1      }
+ 111          
+ 112          /*>>>>>>>>>> (C) COPYRIGHT NBUFE <<<<<< >>>>>> END OF FILE <<<<<<<<<<*/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    370    ----
+   CODE SIZE        =    789    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              06/18/2023 16:02:10 PAGE 3   
+
    CONSTANT SIZE    =     25    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

@@ -24,9 +24,8 @@
 #define LED8X_ROW P7 // 8x8点阵屏行扫描端口
 
 /* 私有变量 ---------------------------------------------------------*/
-code uint8 IMAGES[] = { 0xFF, 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
-const int IMAGES_LEN = sizeof(IMAGES)/8;
-
+code uint8 LEDHIGHT[] = { 0xFF, 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
+code uint8 MIDDLE[] = { 0xFF, 0xE7, 0xC3, 0x81, 0x00 };
 uint8 index;
 
 /* 扩展变量 ---------------------------------------------------------*/
@@ -39,16 +38,32 @@ int hight[] = { 1, 2, 3, 4, 5, 6, 7, 8, };
 
 /**
  * @brief  LED8X8点阵屏显示
- * @param  row: 列号
+ * @param  None
  * @retval None
- * @note   None
+ * @note   从低到高
  */
-void LED()
+void LED1()
 {
     for (index = 0; index < 8; index++)
     {
         LED8X_COL = 0x00; // 消影
-        LED8X_ROW = IMAGES[hight[index]];
+        LED8X_ROW = LEDHIGHT[hight[index]];
+        LED8X_COL = _cror_(0x80, index); // 列扫描
+    }
+}
+
+/**
+ * @brief  LED8X8点阵屏显示
+ * @param  None
+ * @retval None
+ * @note   从中间到两边
+ */
+void LED2()
+{
+    for (index = 0; index < 8; index++)
+    {
+        LED8X_COL = 0x00; // 消影
+        LED8X_ROW = MIDDLE[hight[index]];
         LED8X_COL = _cror_(0x80, index); // 列扫描
     }
 }
